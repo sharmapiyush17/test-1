@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Grade Calculator</title>
+  <style>
+    table {
+      text-align: center;
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 70%;
+      font-family: Arial, sans-serif;
+    }
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    input, button {
+      padding: 8px 12px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    #controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<h1 style="text-align: center;">Grade Calculator</h1>
+
+<div id="controls">
+  <button onclick="addActivity()">Add Activity</button>
+  <label>Activity</label>
+  <input type="text" id="activity">
+  <label>Weight</label>
+  <input type="text" id="weight"><br>
+
+  <button onclick="addGrade()">Add Grade</button>
+  <label>Grade</label>
+  <input type="text" id="grade">
+  <label>Activity no</label>
+  <input type="text" id="activityNo"><br>
+
+  <button onclick="deleteActivity()">Delete Activity</button>
+</div>
+
+<table id="theTable">
+  <tr>
+    <th>No</th>
+    <th>Activity</th>
+    <th>Weight</th>
+    <th>Grade</th>
+  </tr>
+  <tr>
+    <td>1</td>
+    <td>Lab1</td>
+    <td>10</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>2</td>
+    <td>Lab2</td>
+    <td>20</td>
+    <td></td>
+  </tr>
+</table>
+
+<script>
+  function displayError(message) {
+    alert("Error Message: " + message);
+  }
+
+  function addActivity() {
+    const activity = document.getElementById("activity").value.trim();
+    const weight = document.getElementById("weight").value.trim();
+
+    if (!activity) {
+      displayError("Activity name is rejected.");
+      return;
+    }
+
+    const weightVal = parseInt(weight);
+    if (!weight || isNaN(weightVal) || weightVal < 1 || weightVal > 100) {
+      displayError("Weight is rejected.");
+      return;
+    }
+
+    const table = document.getElementById("theTable");
+    const rowCount = table.rows.length;
+    const newRow = table.insertRow(-1);
+    newRow.insertCell(0).innerHTML = rowCount;
+    newRow.insertCell(1).innerHTML = activity;
+    newRow.insertCell(2).innerHTML = weightVal;
+    newRow.insertCell(3).innerHTML = "";
+
+    document.getElementById("activity").value = "";
+    document.getElementById("weight").value = "";
+  }
+
+  function addGrade() {
+    const grade = document.getElementById("grade").value.trim();
+    const activityNo = document.getElementById("activityNo").value.trim();
+
+    const gradeVal = parseInt(grade);
+    const activityNoVal = parseInt(activityNo);
+    const table = document.getElementById("theTable");
+
+    if (!grade || isNaN(gradeVal) || gradeVal < 0 || gradeVal > 100) {
+      displayError("Grade is rejected.");
+      return;
+    }
+
+    if (!activityNo || isNaN(activityNoVal) || activityNoVal < 1 || activityNoVal >= table.rows.length) {
+      displayError("Activity No is rejected.");
+      return;
+    }
+
+    const row = table.rows[activityNoVal];
+    row.cells[3].innerHTML = gradeVal;
+
+    document.getElementById("grade").value = "";
+    document.getElementById("activityNo").value = "";
+  }
+
+  function deleteActivity() {
+    const table = document.getElementById("theTable");
+    if (table.rows.length <= 3) {
+      displayError("No more activities to remove.");
+      return;
+    }
+    table.deleteRow(-1);
+  }
+</script>
+
+</body>
+</html>
